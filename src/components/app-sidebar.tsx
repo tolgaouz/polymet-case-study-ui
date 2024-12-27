@@ -11,21 +11,17 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { getDesigns } from "@/lib/mock-store";
 import { UserButton } from "@clerk/nextjs";
 import { currentUser } from "@clerk/nextjs/server";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-const designs = [
-  {
-    name: "Vercel AI Chatbot Design",
-    url: "/designs/vercel-ai-chatbot-github-repo",
-  },
-];
-
 export async function AppSidebar() {
   const user = await currentUser();
+  const designs = await getDesigns();
+
   return (
     <Sidebar>
       <SidebarHeader className="p-4 px-6 flex w-full justify-center">
@@ -34,16 +30,18 @@ export async function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Designs</SidebarGroupLabel>
-          <SidebarGroupAction title="Start Design">
-            <Plus /> <span className="sr-only">Start Design</span>
-          </SidebarGroupAction>
+          <Link href="/designs/new">
+            <SidebarGroupAction title="Start Design">
+              <Plus /> <span className="sr-only">Start Design</span>
+            </SidebarGroupAction>
+          </Link>
           <SidebarGroupContent>
             <SidebarMenu className="flex flex-col gap-2">
-              {designs.map((project) => (
-                <SidebarMenuItem key={project.name}>
+              {designs.map((design) => (
+                <SidebarMenuItem key={design.id}>
                   <SidebarMenuButton asChild>
-                    <Link href={project.url}>
-                      <span>{project.name}</span>
+                    <Link href={`/designs/${design.id}`}>
+                      <span>{design.chatName}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

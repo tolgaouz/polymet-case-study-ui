@@ -41,7 +41,7 @@ export default function RootLayout({
         >
           <SidebarProvider>
             <AppSidebar />
-            <main className="flex flex-col gap-8 p-4 row-start-2 items-center sm:items-start">
+            <main className="flex grow flex-col gap-8 p-4 row-start-2 items-center sm:items-start">
               <div className="flex items-center gap-4">
                 <SidebarTrigger />
                 <Breadcrumb>
