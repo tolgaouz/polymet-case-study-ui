@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { generateBundle } from "@/lib/bundler.service";
-import { Design } from "@/types";
+import { Design, DesignMessage } from "@/types";
 
 interface DesignState {
   designs: Design[];
@@ -8,6 +8,7 @@ interface DesignState {
   updateDesign: (id: string, updates: Partial<Design>) => void;
   getDesigns: () => Design[];
   getDesignById: (id: string) => Design | undefined;
+  addDesignMessage: (id: string, message: DesignMessage) => void;
 }
 
 export const useDesignStore = create<DesignState>()((set, get) => ({
@@ -51,5 +52,18 @@ export const useDesignStore = create<DesignState>()((set, get) => ({
 
   getDesignById: (id: string) => {
     return get().designs.find((design) => design.id === id);
+  },
+
+  addDesignMessage: (id, message) => {
+    set((state) => {
+      return {
+        ...state,
+        designs: state.designs.map((design) =>
+          design.id === id
+            ? { ...design, messages: [...design.messages, message] }
+            : design
+        ),
+      };
+    });
   },
 }));
