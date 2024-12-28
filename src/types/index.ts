@@ -1,4 +1,4 @@
-export interface DesignMessage {
+export interface Message {
   role: "user" | "assistant";
   content: string;
 }
@@ -15,6 +15,6 @@ export interface Design {
   chatName: string;
   framework: string;
   createdAt: Date;
-  messages: DesignMessage[];
+  messages: Message[];
   initialBundle: Bundle;
 }

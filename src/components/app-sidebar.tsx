@@ -45,7 +45,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={design.id}>
                   <SidebarMenuButton asChild>
                     <Link href={`/designs/${design.id}`}>
-                      <span>{design.chatName}</span>
+                      <span>{design.id}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

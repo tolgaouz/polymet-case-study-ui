@@ -3,11 +3,12 @@ import { Input } from "@/components/ui/input";
 import { Send } from "lucide-react";
 import { useState } from "react";
 
-interface ChatInputProps {
+interface ChatInputProps extends React.HTMLAttributes<HTMLInputElement> {
   onSend: (message: string) => void;
+  disabled?: boolean;
 }
 
-export function ChatInput({ onSend }: ChatInputProps) {
+export function ChatInput({ onSend, disabled, ...props }: ChatInputProps) {
   const [message, setMessage] = useState("");
 
   const handleSend = () => {
@@ -32,8 +33,9 @@ export function ChatInput({ onSend }: ChatInputProps) {
         onKeyDown={handleKeyDown}
         placeholder="Type your message..."
         className="flex-1"
+        {...props}
       />
-      <Button size="icon" onClick={handleSend}>
+      <Button size="icon" onClick={handleSend} disabled={disabled}>
         <Send className="h-4 w-4" />
       </Button>
     </div>

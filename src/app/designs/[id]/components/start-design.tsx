@@ -14,9 +14,11 @@ export default function StartDesign() {
   const [isLoading, setIsLoading] = useState(false);
   const createDesign = useDesignStore((state) => state.createDesign);
 
-  async function onSubmit(formData: FormData) {
+  async function onCreateDesign(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     setIsLoading(true);
     try {
+      const formData = new FormData(event.currentTarget);
       const repoUrl = formData.get("repoUrl") as string;
       const path = formData.get("path") as string;
 
@@ -36,7 +38,7 @@ export default function StartDesign() {
   }
 
   return (
-    <form action={onSubmit} className="container mx-auto p-4">
+    <form onSubmit={onCreateDesign} className="container mx-auto p-4">
       <Card className="w-full max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle className="text-3xl font-bold text-center">

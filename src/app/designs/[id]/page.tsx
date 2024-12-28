@@ -6,7 +6,6 @@ import { Card } from "@/components/ui/card";
 import { ChatMessage } from "@/components/chat-message";
 import { ChatInput } from "../../../components/chat-input";
 import { useParams } from "next/navigation";
-import { DesignMessage } from "@/types";
 
 export default function DesignPage() {
   const params = useParams();
@@ -14,15 +13,8 @@ export default function DesignPage() {
   const currentDesign = designs.find((d) => d.id === params.id);
 
   const handleSendMessage = (content: string) => {
-    const newMessage: DesignMessage = { content, role: "user" };
-
     // Update the design's messages in the store
-    useDesignStore
-      .getState()
-      .addDesignMessage(params.id as string, newMessage);
-
-    // Here you would typically call your AI service
-    // and then add the response to the messages
+    useDesignStore.getState().sendMessage(params.id as string, content);
   };
 
   console.log(currentDesign);
@@ -46,7 +38,10 @@ export default function DesignPage() {
             ))}
           </div>
           <div className="border-t p-4">
-            <ChatInput onSend={handleSendMessage} />
+            <ChatInput
+              disabled={currentDesign.isLLMResponding}
+              onSend={handleSendMessage}
+            />
           </div>
         </Card>
       </div>
