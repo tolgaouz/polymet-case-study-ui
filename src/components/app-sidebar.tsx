@@ -1,3 +1,9 @@
+/** This is client side because i'm just using a zustand store to mock my calls etc.
+ * Not using a DB right now to pull data from.
+ */
+
+"use client";
+
 import {
   Sidebar,
   SidebarContent,
@@ -11,16 +17,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { getDesigns } from "@/lib/mock-store";
 import { UserButton } from "@clerk/nextjs";
-import { currentUser } from "@clerk/nextjs/server";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useDesignStore } from "@/stores/design.store";
 
-export async function AppSidebar() {
-  const user = await currentUser();
-  const designs = await getDesigns();
+export function AppSidebar() {
+  const designs = useDesignStore((state) => state.designs);
 
   return (
     <Sidebar>
@@ -51,22 +55,14 @@ export async function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="p-4 hover:bg-neutral-100">
-        <div className="flex items-center divide-x">
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox: "w-8 h-8",
-                userButtonTrigger: "mx-2",
-              },
-            }}
-          />
-          <div className="flex px-4 flex-col gap-2 h-full text-sm font-sans">
-            <h3 className="font-semibold">{user?.fullName}</h3>
-            <p className="text-xs text-gray-500">
-              {user?.primaryEmailAddress?.emailAddress ?? user?.firstName}
-            </p>
-          </div>
-        </div>
+        <UserButton
+          appearance={{
+            elements: {
+              avatarBox: "w-8 h-8",
+              userButtonTrigger: "mx-2",
+            },
+          }}
+        />
       </SidebarFooter>
     </Sidebar>
   );

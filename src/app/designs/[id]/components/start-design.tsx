@@ -1,37 +1,35 @@
-'use client';
+"use client";
 
-import { createDesign } from "@/lib/mock-store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { RepositoryPathSelector } from "./repo-path-selector";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useDesignStore } from "@/stores/design.store";
+import { Spinner } from "@/components/ui/spinner";
 
 export default function StartDesign() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const createDesign = useDesignStore((state) => state.createDesign);
 
   async function onSubmit(formData: FormData) {
     setIsLoading(true);
     try {
-      const repoUrl = formData.get('repoUrl') as string;
-      const framework = formData.get('framework') as string;
+      const repoUrl = formData.get("repoUrl") as string;
+      const path = formData.get("path") as string;
 
-      if (!repoUrl || !framework) {
-        throw new Error('Missing required fields');
+      if (!repoUrl || !path) {
+        throw new Error("Missing required fields");
       }
 
-      const design = await createDesign(repoUrl, framework);
-      
-      // Force a revalidation of the root layout which includes the sidebar
-      router.refresh();
-      
+      const design = await createDesign(repoUrl, path);
+
       // Navigate to the new design page
       router.push(`/designs/${design.id}`);
     } catch (error) {
-      console.error('Failed to create design:', error);
+      console.error("Failed to create design:", error);
     } finally {
       setIsLoading(false);
     }
@@ -57,9 +55,15 @@ export default function StartDesign() {
           </div>
           <div className="space-y-2">
             <Label>Select Path</Label>
-            <RepositoryPathSelector name="framework" required />
+            <Input
+              id="path"
+              name="path"
+              placeholder="Path to the code you want to design"
+              required
+            />
           </div>
           <Button className="w-full" type="submit" disabled={isLoading}>
+            {isLoading && <Spinner />}
             {isLoading ? "Creating..." : "Create Design"}
           </Button>
         </CardContent>
