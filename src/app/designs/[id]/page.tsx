@@ -1,7 +1,5 @@
 "use client";
 import { useDesignStore } from "@/stores/design.store";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
 import { ChatMessage } from "@/components/chat-message";
 import { ChatInput } from "../../../components/chat-input";
@@ -32,7 +30,7 @@ export default function DesignPage() {
   }
 
   return (
-    <div className="grid grid-cols-2 w-full h-full">
+    <div className="grid grid-cols-2 gap-4 w-full h-full">
       {/* Left side - Chat Section */}
 
       <Card className="h-full flex flex-col">
@@ -57,29 +55,10 @@ export default function DesignPage() {
       </Card>
 
       {/* Right side - Preview & Code */}
-      <div className="h-full p-4">
-        <Tabs
-          defaultValue="preview"
-          className="h-full grid grid-rows-[auto,1fr]"
-        >
-          <TabsList>
-            <TabsTrigger value="preview">Preview</TabsTrigger>
-            <TabsTrigger value="code">Code</TabsTrigger>
-          </TabsList>
 
-          <TabsContent value="preview" className="mt-4 h-full">
-            <Card className="h-full">
-              <BundlePreview bundle={currentDesign.bundle} />
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="code" className="mt-4 h-full">
-            <ScrollArea className="h-full">
-              <Card className="p-4">{/* Code preview will go here */}</Card>
-            </ScrollArea>
-          </TabsContent>
-        </Tabs>
-      </div>
+      <Card className="h-full p-2">
+        <BundlePreview bundle={currentDesign.bundle} />
+      </Card>
     </div>
   );
 }

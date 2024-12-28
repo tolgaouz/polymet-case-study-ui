@@ -6,17 +6,13 @@
 import { GenerateBundleParams } from "@/app/api/designs/bundle/route";
 import { Bundle } from "@/types";
 
-export const generateBundle = async ({
-  repoUrl,
-  componentPath,
-  entryFileContent,
-}: GenerateBundleParams) => {
+export const generateBundle = async (params: GenerateBundleParams) => {
   const response = await fetch("/api/designs/bundle", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ repoUrl, componentPath, entryFileContent }),
+    body: JSON.stringify(params),
   });
   return response.json() as Promise<Bundle>;
 };

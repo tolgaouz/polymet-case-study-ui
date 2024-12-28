@@ -5,19 +5,16 @@ export interface GenerateBundleParams {
   repoUrl: string;
   componentPath: string;
   entryFileContent?: string;
+  imports?: string[];
 }
 
-const bundleCode = async ({
-  repoUrl,
-  componentPath,
-  entryFileContent,
-}: GenerateBundleParams) => {
+const bundleCode = async (params: GenerateBundleParams) => {
   const response = await fetch(process.env.BUNDLER_API_URL as string, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ repoUrl, componentPath, entryFileContent }),
+    body: JSON.stringify(params),
   });
   return response.json() as Promise<Bundle>;
 };
@@ -27,11 +24,13 @@ export const POST = async (req: Request) => {
   if (!user) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { repoUrl, componentPath, entryFileContent } = await req.json();
+  const { repoUrl, componentPath, entryFileContent, imports } =
+    await req.json();
   const bundle = await bundleCode({
     repoUrl,
     componentPath,
     entryFileContent,
+    imports,
   });
   return Response.json(bundle);
 };
