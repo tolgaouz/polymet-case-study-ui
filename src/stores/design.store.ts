@@ -9,16 +9,33 @@ interface Design {
   repoUrl: string;
   componentPath: string;
   bundle: Bundle;
+  isBundleLoading: boolean;
 }
 
 interface DesignStore {
   createDesign: (repoUrl: string, componentPath: string) => Promise<Design>;
+  generateBundleForDesign: (
+    id: string,
+    entryFileContent: string
+  ) => Promise<Design | undefined>;
   designs: Design[];
   sendMessage: (id: string, content: string) => Promise<void>;
 }
 
 export const useDesignStore = create<DesignStore>((set, get) => ({
   designs: [],
+  generateBundleForDesign: async (id: string, entryFileContent: string) => {
+    const design = get().designs.find((design) => design.id === id);
+    if (!design) return;
+    const bundle = await generateBundle({
+      repoUrl: design.repoUrl,
+      componentPath: design.componentPath,
+      entryFileContent,
+    });
+    design.bundle = bundle;
+    design.isBundleLoading = false;
+    return design;
+  },
   createDesign: async (repoUrl: string, componentPath: string) => {
     const design: Design = {
       id: crypto.randomUUID(),
@@ -30,10 +47,15 @@ export const useDesignStore = create<DesignStore>((set, get) => ({
         html: null,
         js: null,
       },
+      isBundleLoading: true,
     };
     // Call the bundle api
-    const bundle = await generateBundle(repoUrl, componentPath);
+    const bundle = await generateBundle({
+      repoUrl,
+      componentPath,
+    });
     design.bundle = bundle;
+    design.isBundleLoading = false;
     set((state) => ({
       designs: [...state.designs, design],
     }));
