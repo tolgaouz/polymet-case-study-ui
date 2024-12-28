@@ -20,13 +20,12 @@ export default function StartDesign() {
     try {
       const formData = new FormData(event.currentTarget);
       const repoUrl = formData.get("repoUrl") as string;
-      const path = formData.get("path") as string;
 
-      if (!repoUrl || !path) {
+      if (!repoUrl) {
         throw new Error("Missing required fields");
       }
 
-      const design = await createDesign(repoUrl, path);
+      const design = await createDesign(repoUrl);
 
       // Navigate to the new design page
       router.push(`/designs/${design.id}`);
@@ -52,15 +51,6 @@ export default function StartDesign() {
               id="repo-url"
               name="repoUrl"
               placeholder="https://github.com/username/repo"
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label>Select Path</Label>
-            <Input
-              id="path"
-              name="path"
-              placeholder="Path to the code you want to design"
               required
             />
           </div>

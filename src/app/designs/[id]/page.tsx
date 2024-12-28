@@ -2,10 +2,10 @@
 import { useDesignStore } from "@/stores/design.store";
 import { Card } from "@/components/ui/card";
 import { ChatMessage } from "@/components/chat-message";
-import { ChatInput } from "../../../components/chat-input";
 import { useParams } from "next/navigation";
 import { useEffect, useRef } from "react";
-import { BundlePreview } from "./components/bundle-preview";
+import { BundlePreview } from "@/components/bundle-preview";
+import { ChatInput } from "@/components/chat-input";
 
 export default function DesignPage() {
   const params = useParams();
@@ -16,6 +16,8 @@ export default function DesignPage() {
   const handleSendMessage = (content: string) => {
     useDesignStore.getState().sendMessage(params.id as string, content);
   };
+
+  console.log("bundling", currentDesign?.isBundleLoading);
 
   // Auto scroll to bottom when messages change
   useEffect(() => {
@@ -57,7 +59,10 @@ export default function DesignPage() {
       {/* Right side - Preview & Code */}
 
       <Card className="h-full p-2">
-        <BundlePreview bundle={currentDesign.bundle} />
+        <BundlePreview
+          bundle={currentDesign.bundle}
+          isLoading={currentDesign.isBundleLoading}
+        />
       </Card>
     </div>
   );

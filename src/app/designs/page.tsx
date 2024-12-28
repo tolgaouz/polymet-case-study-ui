@@ -1,5 +1,5 @@
 import StartDesign from "@/components/start-design";
 
-export default function NewDesignPage() {
+export default function DesignsPage() {
   return <StartDesign />;
 }

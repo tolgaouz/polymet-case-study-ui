@@ -3,7 +3,6 @@ import { currentUser } from "@clerk/nextjs/server";
 
 export interface GenerateBundleParams {
   repoUrl: string;
-  componentPath: string;
   entryFileContent?: string;
   imports?: string[];
 }
@@ -24,11 +23,9 @@ export const POST = async (req: Request) => {
   if (!user) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { repoUrl, componentPath, entryFileContent, imports } =
-    await req.json();
+  const { repoUrl, entryFileContent, imports } = await req.json();
   const bundle = await bundleCode({
     repoUrl,
-    componentPath,
     entryFileContent,
     imports,
   });

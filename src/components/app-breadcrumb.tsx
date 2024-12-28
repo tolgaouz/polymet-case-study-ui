@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { usePathname } from "next/navigation";
 import {
   Breadcrumb,
@@ -26,16 +27,16 @@ export function AppBreadcrumb() {
           const isLast = index === segments.length - 1;
 
           return (
-            <>
-              <BreadcrumbItem key={href}>
+            <React.Fragment key={`breadcrumb-${href}-${index}`}>
+              <BreadcrumbItem>
                 {isLast ? (
                   <BreadcrumbPage>{segment}</BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink href={href}>{segment}</BreadcrumbLink>
                 )}
               </BreadcrumbItem>
-              {!isLast && <BreadcrumbSeparator key={`${href}-separator`} />}
-            </>
+              {!isLast && <BreadcrumbSeparator />}
+            </React.Fragment>
           );
         })}
       </BreadcrumbList>

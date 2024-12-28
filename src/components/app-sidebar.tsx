@@ -17,13 +17,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { UserButton } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useDesignStore } from "@/stores/design.store";
 
 export function AppSidebar() {
+  const { user } = useUser();
   const designs = useDesignStore((state) => state.designs);
 
   return (
@@ -55,14 +56,22 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="p-4 hover:bg-neutral-100">
-        <UserButton
-          appearance={{
-            elements: {
-              avatarBox: "w-8 h-8",
-              userButtonTrigger: "mx-2",
-            },
-          }}
-        />
+        <div className="flex flex-row items-center gap-2">
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox: "w-8 h-8",
+                userButtonTrigger: "mx-2",
+              },
+            }}
+          />
+          <div className="flex flex-col">
+            <span className="text-sm font-medium">{user?.fullName}</span>
+            <span className="text-xs text-neutral-500">
+              {user?.primaryEmailAddress?.emailAddress}
+            </span>
+          </div>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );

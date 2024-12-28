@@ -2,10 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { AppBreadcrumb } from "@/components/app-breadcrumb";
-import { headers } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,16 +29,7 @@ export default async function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <SidebarProvider>
-            <AppSidebar />
-            <main className="flex grow flex-col gap-8 p-4 row-start-2 items-center sm:items-start">
-              <div className="flex items-center gap-4">
-                <SidebarTrigger />
-                <AppBreadcrumb />
-              </div>
-              {children}
-            </main>
-          </SidebarProvider>
+          {children}
         </body>
       </html>
     </ClerkProvider>

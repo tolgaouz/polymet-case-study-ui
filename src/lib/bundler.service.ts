@@ -16,3 +16,25 @@ export const generateBundle = async (params: GenerateBundleParams) => {
   });
   return response.json() as Promise<Bundle>;
 };
+
+export const parseLLMResponseForBundle = (response: string) => {
+  // Extract view artifact content
+  const viewMatch = response.match(
+    /<view-artifact>([\s\S]*?)<\/view-artifact>/
+  );
+  const viewContent = viewMatch ? viewMatch[1].trim() : null;
+
+  // Extract all imports
+  const importRegex = /<import>([\s\S]*?)<\/import>/g;
+  const imports: string[] = [];
+  let importMatch;
+
+  while ((importMatch = importRegex.exec(response)) !== null) {
+    imports.push(importMatch[1].trim());
+  }
+
+  return {
+    viewContent,
+    imports,
+  };
+};
