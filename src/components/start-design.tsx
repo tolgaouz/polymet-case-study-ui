@@ -12,6 +12,7 @@ import { Spinner } from "@/components/ui/spinner";
 export default function StartDesign() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const createDesign = useDesignStore((state) => state.createDesign);
 
   async function onCreateDesign(event: React.FormEvent<HTMLFormElement>) {
@@ -22,7 +23,8 @@ export default function StartDesign() {
       const repoUrl = formData.get("repoUrl") as string;
 
       if (!repoUrl) {
-        throw new Error("Missing required fields");
+        setError("Missing required fields");
+        return;
       }
 
       const design = await createDesign(repoUrl);
@@ -31,6 +33,7 @@ export default function StartDesign() {
       router.push(`/designs/${design.id}`);
     } catch (error) {
       console.error("Failed to create design:", error);
+      setError("Failed to generate a bundle for the githu repository.");
     } finally {
       setIsLoading(false);
     }
@@ -58,6 +61,7 @@ export default function StartDesign() {
             {isLoading && <Spinner />}
             {isLoading ? "Creating..." : "Create Design"}
           </Button>
+          {error && <p className="text-red-500">{error}</p>}
         </CardContent>
       </Card>
     </form>

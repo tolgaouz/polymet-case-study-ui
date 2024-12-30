@@ -55,6 +55,9 @@ export const useDesignStore = create<DesignStore>((set, get) => ({
     });
     design.bundle = bundle;
     design.isBundleLoading = false;
+
+    if (!bundle.html || !bundle.js)
+      throw new Error("Failed to generate bundle");
     set((state) => ({
       designs: [...state.designs, design],
     }));
