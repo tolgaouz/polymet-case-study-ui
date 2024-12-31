@@ -1,3 +1,4 @@
+export const maxDuration = 30;
 import { Bundle } from "@/types";
 import { currentUser } from "@clerk/nextjs/server";
 
